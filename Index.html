@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de Matrizes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    h1, h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .dimensoes-matriz {
+      flex: 1 1 300px;
+      display: flex;
+      gap: 15px;
+    }
+
+    .dimensoes-matriz label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .dimensoes-matriz label span {
+      margin-right: 10px;
+    }
+
+    .dimensoes-matriz input {
+      width: 60px;
+      padding: 5px;
+      text-align: center;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    button {
+      background-color: #fff;
+      border: 2px solid #007bff;
+      color: #007bff;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    button:hover {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .matriz {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: #fff;
+      font-size: 16px;
+      font-family: monospace;
+      min-width: 200px;
+    }
+
+    .linha-matriz {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .celula-matriz {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    #explicacao-tipos-matriz {
+      margin-bottom: 20px;
+      max-width: 1200px;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    #resultado-tipo-matriz,
+    #container-transposicao-matriz,
+    #container-matriz-identidade,
+    #container-resultado {
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: 20px;
+    }
+
+    .container-matriz {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .container-matriz > div {
+      flex: 1 1 300px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .container-matriz span {
+      display: block;
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .informacoes-transposicao {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .matriz-resultado {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .matriz-resultado .linha-matriz {
+      justify-content: center;
+    }
+
+    .matriz-resultado .celula-matriz {
+      border: 1px solid #007bff;
+      color: #007bff;
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerador de Matrizes</h1>
+  <div class="container">
+    <div class="dimensoes-matriz">
+      <h2>Matriz 1</h2>
+      <label for="linhas1"><span>Linhas:</span>
+        <input type="number" id="linhas1" min="1" value="3" />
+      </label>
+      <label for="colunas1"><span>Colunas:</span>
+        <input type="number" id="colunas1" min="1" value="3" />
+      </label>
+      <h2>Matriz 2</h2>
+      <label for="linhas2"><span>Linhas:</span>
+        <input type="number" id="linhas2" min="1" value="3" />
+      </label>
+      <label for="colunas2"><span>Colunas:</span>
+        <input type="number" id="colunas2" min="1" value="3" />
+      </label>
+      <h2>Matriz Identidade</h2>
+      <label for="tamanho-identidade"><span>Tamanho:</span>
+        <input type="number" id="tamanho-identidade" min="1" value="3" />
+      </label>
+    </div>
+    <div class="buttons-container">
+      <button onclick="gerarMatrizes()">Gerar Matrizes</button>
+      <button onclick="identificarMatriz()">Identificar Tipo de Matriz</button>
+      <button onclick="compararMatrizes()">Comparar Matrizes</button>
+      <button onclick="transporMatrizes()">Transpor Matrizes</button>
+      <button onclick="gerarMatrizIdentidade()">Gerar Matriz Identidade</button>
+      <button onclick="somarMatrizes()">Somar Matrizes</button>
+      <button onclick="subtrairMatrizes()">Subtrair Matrizes</button>
+      <button onclick="multiplicarMatrizes()">Multiplicar Matrizes</button>
+      <button onclick="inverterMatrizes()">Inverter Matrizes</button>
+    </div>
+  </div>
+  <div id="container-matrizes" class="container-matriz">
+    <div id="matriz1" class="matriz">
+      <span>Matriz 1</span>
+    </div>
+    <div id="matriz2" class="matriz">
+      <span>Matriz 2</span>
+    </div>
+  </div>
+  <div id="explicacao-tipos-matriz">
+    <h2>Tipos de Matrizes</h2>
+    <ul>
+      <li><strong>Matriz Quadrada:</strong> Possui o mesmo número de linhas e colunas.</li>
+      <li><strong>Matriz Diagonal:</strong> Todos os elementos fora da diagonal principal são zero.</li>
+      <li><strong>Matriz Identidade:</strong> Matriz diagonal com todos os elementos da diagonal principal iguais a 1.</li>
+      <li><strong>Matriz Nula:</strong> Todos os elementos são zero.</li>
+      <li><strong>Matriz Linha:</strong> Tem apenas uma linha.</li>
+      <li><strong>Matriz Coluna:</strong> Tem apenas uma coluna.</li>
+    </ul>
+  </div>
+  <div id="resultado-tipo-matriz"></div>
+  <div id="container-transposicao-matriz" class="informacoes-transposicao">
+    <div>
+      <h2>Matriz Transposta 1</h2>
+      <div id="matriz1-transposta" class="matriz"></div>
+    </div>
+    <div>
+      <h2>Matriz Transposta 2</h2>
+      <div id="matriz2-transposta" class="matriz"></div>
+    </div>
+  </div>
+  <div id="container-matriz-identidade">
+    <h2>Matriz Identidade</h2>
+    <div id="matriz-identidade" class="matriz"></div>
+  </div>
+  <div id="container-resultado">
+    <h2>Resultado</h2>
+    <div id="resultado" class="matriz-resultado"></div>
+  </div>
+  <script>
+    // Função para gerar matrizes com base nas dimensões fornecidas
+    function gerarMatrizes() {
+      const linhas1 = document.getElementById("linhas1").value;
+      const colunas1 = document.getElementById("colunas1").value;
+      const linhas2 = document.getElementById("linhas2").value;
+      const colunas2 = document.getElementById("colunas2").value;
+      const containerMatriz1 = document.getElementById("matriz1");
+      const containerMatriz2 = document.getElementById("matriz2");
+
+      containerMatriz1.innerHTML = "<span>Matriz 1</span>";
+      containerMatriz2.innerHTML = "<span>Matriz 2</span>";
+
+      for (let i = 0; i < linhas1; i++) {
+        const linha = document.createElement("div");
+        linha.className = "linha-matriz";
+        for (let j = 0; j < colunas1; j++) {
+          const celula = document.createElement("input");
+          celula.className = "celula-matriz";
+          celula.type = "number";
+          celula.value = Math.floor(Math.random() * 10);
+          linha.appendChild(celula);
+        }
+        containerMatriz1.appendChild(linha);
+      }
+
+      for (let i = 0; i < linhas2; i++) {
+        const linha = document.createElement("div");
+        linha.className = "linha-matriz";
+        for (let j = 0; j < colunas2; j++) {
+          const celula = document.createElement("input");
+          celula.className = "celula-matriz";
+          celula.type = "number";
+          celula.value = Math.floor(Math.random() * 10);
+          linha.appendChild(celula);
+        }
+        containerMatriz2.appendChild(linha);
+      }
+    }
+
+    // Função para identificar o tipo de matriz
+    function identificarMatriz() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const matriz2 = obterMatrizDoContainer(document.getElementById("matriz2"));
+      const resultado = document.getElementById("resultado-tipo-matriz");
+
+      resultado.innerHTML = "<h2>Resultado da Identificação</h2>";
+
+      resultado.innerHTML += `<p>Matriz 1: ${obterTipoDeMatriz(matriz1)}</p>`;
+      resultado.innerHTML += `<p>Matriz 2: ${obterTipoDeMatriz(matriz2)}</p>`;
+    }
+
+    // Função para obter o tipo de matriz
+    function obterTipoDeMatriz(matriz) {
+      const linhas = matriz.length;
+      const colunas = matriz[0].length;
+
+      if (linhas === 1) return "Matriz Linha";
+      if (colunas === 1) return "Matriz Coluna";
+      if (linhas === colunas) {
+        if (matriz.every((linha, i) => linha.every((celula, j) => (i === j ? celula !== 0 : celula === 0)))) {
+          return "Matriz Diagonal";
+        }
+        if (matriz.every((linha, i) => linha.every((celula, j) => (i === j ? celula === 1 : celula === 0)))) {
+          return "Matriz Identidade";
+        }
+        return "Matriz Quadrada";
+      }
+      if (matriz.every((linha) => linha.every((celula) => celula === 0))) {
+        return "Matriz Nula";
+      }
+      return "Outro Tipo de Matriz";
+    }
+
+    // Função para comparar matrizes
+    function compararMatrizes() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const matriz2 = obterMatrizDoContainer(document.getElementById("matriz2"));
+      const resultado = document.getElementById("resultado");
+
+      if (matriz1.length !== matriz2.length || matriz1[0].length !== matriz2[0].length) {
+        resultado.innerHTML = "As matrizes devem ter as mesmas dimensões para serem comparadas.";
+        return;
+      }
+
+      const iguais = matriz1.every((linha, i) => linha.every((celula, j) => celula === matriz2[i][j]));
+      resultado.innerHTML = iguais ? "As matrizes são iguais." : "As matrizes são diferentes.";
+    }
+
+    // Função para transpor matrizes
+    function transporMatrizes() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const matriz2 = obterMatrizDoContainer(document.getElementById("matriz2"));
+      const transposta1 = transporMatriz(matriz1);
+      const transposta2 = transporMatriz(matriz2);
+      const containerTransposta1 = document.getElementById("matriz1-transposta");
+      const containerTransposta2 = document.getElementById("matriz2-transposta");
+
+      containerTransposta1.innerHTML = "";
+      containerTransposta2.innerHTML = "";
+
+      transposta1.forEach((linha) => {
+        const linhaDiv = document.createElement("div");
+        linhaDiv.className = "linha-matriz";
+        linha.forEach((celula) => {
+          const celulaDiv = document.createElement("div");
+          celulaDiv.className = "celula-matriz";
+          celulaDiv.innerText = celula;
+          linhaDiv.appendChild(celulaDiv);
+        });
+        containerTransposta1.appendChild(linhaDiv);
+      });
+
+      transposta2.forEach((linha) => {
+        const linhaDiv = document.createElement("div");
+        linhaDiv.className = "linha-matriz";
+        linha.forEach((celula) => {
+          const celulaDiv = document.createElement("div");
+          celulaDiv.className = "celula-matriz";
+          celulaDiv.innerText = celula;
+          linhaDiv.appendChild(celulaDiv);
+        });
+        containerTransposta2.appendChild(linhaDiv);
+      });
+    }
+
+    // Função para transpor uma matriz
+    function transporMatriz(matriz) {
+      return matriz[0].map((_, colIndex) => matriz.map((linha) => linha[colIndex]));
+    }
+
+    // Função para gerar matriz identidade
+    function gerarMatrizIdentidade() {
+      const tamanho = document.getElementById("tamanho-identidade").value;
+      const containerIdentidade = document.getElementById("matriz-identidade");
+
+      containerIdentidade.innerHTML = "";
+
+      for (let i = 0; i < tamanho; i++) {
+        const linha = document.createElement("div");
+        linha.className = "linha-matriz";
+        for (let j = 0; j < tamanho; j++) {
+          const celula = document.createElement("div");
+          celula.className = "celula-matriz";
+          celula.innerText = i === j ? 1 : 0;
+          linha.appendChild(celula);
+        }
+        containerIdentidade.appendChild(linha);
+      }
+    }
+
+    // Função para somar matrizes
+    function somarMatrizes() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const matriz2 = obterMatrizDoContainer(document.getElementById("matriz2"));
+      const resultado = document.getElementById("resultado");
+
+      if (matriz1.length !== matriz2.length || matriz1[0].length !== matriz2[0].length) {
+        resultado.innerHTML = "As matrizes devem ter as mesmas dimensões para serem somadas.";
+        return;
+      }
+
+      const soma = matriz1.map((linha, i) => linha.map((celula, j) => celula + matriz2[i][j]));
+      exibirMatriz(soma, resultado);
+    }
+
+    // Função para subtrair matrizes
+    function subtrairMatrizes() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const matriz2 = obterMatrizDoContainer(document.getElementById("matriz2"));
+      const resultado = document.getElementById("resultado");
+
+      if (matriz1.length !== matriz2.length || matriz1[0].length !== matriz2[0].length) {
+        resultado.innerHTML = "As matrizes devem ter as mesmas dimensões para serem subtraídas.";
+        return;
+      }
+
+      const diferenca = matriz1.map((linha, i) => linha.map((celula, j) => celula - matriz2[i][j]));
+      exibirMatriz(diferenca, resultado);
+    }
+
+    // Função para multiplicar matrizes
+    function multiplicarMatrizes() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const matriz2 = obterMatrizDoContainer(document.getElementById("matriz2"));
+      const resultado = document.getElementById("resultado");
+
+      if (matriz1[0].length !== matriz2.length) {
+        resultado.innerHTML = "O número de colunas da Matriz 1 deve ser igual ao número de linhas da Matriz 2 para a multiplicação.";
+        return;
+      }
+
+      const produto = Array.from({ length: matriz1.length }, () => Array(matriz2[0].length).fill(0));
+      for (let i = 0; i < matriz1.length; i++) {
+        for (let j = 0; j < matriz2[0].length; j++) {
+          for (let k = 0; k < matriz1[0].length; k++) {
+            produto[i][j] += matriz1[i][k] * matriz2[k][j];
+          }
+        }
+      }
+      exibirMatriz(produto, resultado);
+    }
+
+    // Função para inverter matrizes
+    function inverterMatrizes() {
+      const matriz1 = obterMatrizDoContainer(document.getElementById("matriz1"));
+      const resultado = document.getElementById("resultado");
+
+      if (matriz1.length !== matriz1[0].length) {
+        resultado.innerHTML = "A matriz deve ser quadrada para ser invertida.";
+        return;
+      }
+
+      const inversa = inverterMatriz(matriz1);
+      exibirMatriz(inversa, resultado);
+    }
+
+    // Função para inverter uma matriz (usando a fórmula de matriz adjunta para matrizes 2x2)
+    function inverterMatriz(matriz) {
+      if (matriz.length !== 2 || matriz[0].length !== 2) {
+        alert("A inversão só é suportada para matrizes 2x2 neste exemplo.");
+        return matriz;
+      }
+
+      const det = matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0];
+      if (det === 0) {
+        alert("A matriz não é inversível.");
+        return matriz;
+      }
+
+      return [
+        [matriz[1][1] / det, -matriz[0][1] / det],
+        [-matriz[1][0] / det, matriz[0][0] / det]
+      ];
+    }
+
+    // Função para obter uma matriz do container
+    function obterMatrizDoContainer(container) {
+      const linhas = Array.from(container.getElementsByClassName("linha-matriz"));
+      return linhas.map((linha) => {
+        const celulas = Array.from(linha.getElementsByClassName("celula-matriz"));
+        return celulas.map((celula) => Number(celula.value));
+      });
+    }
+
+    // Função para exibir uma matriz
+    function exibirMatriz(matriz, container) {
+      container.innerHTML = "<h2>Resultado da Operação</h2>";
+      matriz.forEach((linha) => {
+        const linhaDiv = document.createElement("div");
+        linhaDiv.className = "linha-matriz";
+        linha.forEach((celula) => {
+          const celulaDiv = document.createElement("div");
+          celulaDiv.className = "celula-matriz";
+          celulaDiv.innerText = celula;
+          linhaDiv.appendChild(celulaDiv);
+        });
+        container.appendChild(linhaDiv);
+      });
+    }
+  </script>
+</body>
+</html>
